@@ -1,17 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
 import { Link } from "react-router-dom";
 
-function App() {
+function Header() {
   return (
-    <div className="App">
+    <div>
       <nav
         style={{
           borderBottom: "solid 1px",
-          padding: "1rem",
-          margin: "1rem"
+          padding: "1rem"
         }}
       >
+      <Link to="/">Home</Link>
       <Link to="/data">Data</Link>
       <Link to="/voice">Voice</Link>
       </nav>
@@ -19,4 +17,4 @@ function App() {
   );
 }
 
-export default App;
+export default Header;
