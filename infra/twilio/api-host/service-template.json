@@ -1,0 +1,27 @@
+{
+    "name": "Allancall API on DEV",
+    "env": "TEST",
+    "service": {
+        "includeCredentials": true,
+        "uniqueName": "alancallapi",
+        "friendlyName": "Alancall API"
+    },
+    "environments": [
+        {
+            "domainSuffix": "test",
+            "uniqueName": "TEST"
+        },
+        {
+            "domainSuffix": "prod",
+            "uniqueName": "PROD"
+        }
+    ],
+    "functions": [
+        {
+            "friendlyName": "Dial",
+            "codeFile": "../serverless/functions/dialphone.js",
+            "path": "/dial"
+        }
+    ],
+    "deployTimeOut": 60
+}

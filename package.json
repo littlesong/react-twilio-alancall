@@ -16,7 +16,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "deploy": "react-scripts build && twilio serverless:deploy --service-name alancall --cwd serverless --assets-folder ../build",
+    "deploy:twilio:react": "react-scripts build && twilio serverless:deploy --service-name alancall --cwd ./infra/twilio/react-host --assets-folder ../../../build",
+    "deploy:twilio:api": "cd infra/twilio/api-host && npm run deploy:test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
