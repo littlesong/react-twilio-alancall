@@ -11,12 +11,20 @@ import Header from './header';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <Header />
     <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="expenses" element={<DataPage />} />
-      <Route path="invoices" element={<VoicePage />} />
-    </Routes>    
+      <Route path="/" element={<App />} >
+        <Route path="data" element={<DataPage />} />
+        <Route path="voice" element={<VoicePage />} />
+        <Route
+          path="*"
+          element={
+            <main style={{ padding: '1rem' }}>
+              <p>There's nothing here!</p>
+            </main>
+          }
+        />
+      </Route>
+    </Routes>
   </BrowserRouter>
 );
 
