@@ -15,7 +15,9 @@ function App() {
       <Link to="/voice">Voice</Link>
       <Link to="/import">Import</Link>
       </nav>
+      <div className="content-area">
       <Outlet />
+      </div>
     </div>
   );
 }

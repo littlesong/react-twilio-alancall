@@ -3,6 +3,14 @@
   margin: 10px;
 }
 
+.content-area {
+  margin: 10px;
+}
+
+.middle-content {
+  margin-top: '20%'
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
