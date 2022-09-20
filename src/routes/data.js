@@ -2,6 +2,8 @@ import { useState } from "react";
 import ListGroup from 'react-bootstrap/ListGroup';
 import Card from 'react-bootstrap/Card';
 import CardGroup from 'react-bootstrap/CardGroup';
+import Stack from 'react-bootstrap/Stack';
+import Button from 'react-bootstrap/Button';
 
 export default function DataPage() {
 
@@ -14,9 +16,16 @@ export default function DataPage() {
     // handle selected values here
   };
 
+  const onImport = () => {
+    // handle importing csv
+  };
+
   return (
     <main style={{ padding: "1rem 0" }}>
-      <h2>Data Page</h2>
+      <Stack direction="horizontal">
+      <h5>Phone Numbers</h5>
+      <Button variant="link" onClick={ onImport }>Import</Button>
+      </Stack>
       <CardGroup>
       <Card>
         <Card.Body>
@@ -32,7 +41,7 @@ export default function DataPage() {
       <Card>
         <Card.Body>
           <Card.Title>Info</Card.Title>
-          
+
         </Card.Body>
       </Card>
       </CardGroup>

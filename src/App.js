@@ -4,11 +4,11 @@ import { Link, Outlet } from "react-router-dom";
 function App() {
   return (
     <div className="App">
-      <h1>Alancall</h1>
+      <h1>ALLANCALL</h1>
       <nav
         style={{
           borderBottom: "solid 1px",
-          padding: "1rem"
+          padding: "5px"
         }}
       >
       <Link to="/data">Data</Link>
