@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route, } from "react-router-dom";
 import DataPage from './routes/data';
 import VoicePage from './routes/voice';
-import Header from './header';
+import ImportCsv from './routes/import';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,6 +16,7 @@ root.render(
       <Route path="/" element={<App />} >
         <Route path="data" element={<DataPage />} />
         <Route path="voice" element={<VoicePage />} />
+        <Route path="import" element={<ImportCsv />} />
         <Route
           path="*"
           element={
