@@ -21,30 +21,30 @@ export default function DataPage() {
   };
 
   return (
-    <main style={{ padding: "1rem 0" }}>
+    <Stack>
       <Stack direction="horizontal">
-      <h5>Phone Numbers</h5>
-      <Button variant="link" onClick={ onImport }>Import</Button>
+        <h5>Phone Numbers</h5>
+        <Button variant="link" onClick={onImport}>Import</Button>
       </Stack>
       <CardGroup>
-      <Card>
-        <Card.Body>
-          <ListGroup>
-            {
-              phoneData.map((i) => {
-                return <ListGroup.Item> {i} </ListGroup.Item>
-              })
-            }
-          </ListGroup>
-        </Card.Body>
-      </Card>
-      <Card>
-        <Card.Body>
-          <Card.Title>Info</Card.Title>
+        <Card>
+          <Card.Body>
+            <ListGroup>
+              {
+                phoneData.map((i) => {
+                  return <ListGroup.Item> {i} </ListGroup.Item>
+                })
+              }
+            </ListGroup>
+          </Card.Body>
+        </Card>
+        <Card>
+          <Card.Body>
+            <Card.Title>Info</Card.Title>
 
-        </Card.Body>
-      </Card>
+          </Card.Body>
+        </Card>
       </CardGroup>
-    </main>
+    </Stack>
   );
 }

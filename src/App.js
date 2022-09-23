@@ -11,13 +11,15 @@ function App() {
           padding: "5px"
         }}
       >
-      <Link to="/data">Data</Link>
-      <Link to="/voice">Voice</Link>
-      <Link to="/import">Import</Link>
+        <Link to="/data">Data</Link>
+        <Link to="/voice">Voice</Link>
+        <Link to="/import">Import</Link>
       </nav>
-      <div className="content-area">
-      <Outlet />
-      </div>
+      <main>
+        <div className="content-area">
+          <Outlet />
+        </div>
+      </main>
     </div>
   );
 }
