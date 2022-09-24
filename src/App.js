@@ -1,20 +1,24 @@
 import './App.css';
 import { Link, Outlet } from "react-router-dom";
+import Stack from 'react-bootstrap/Stack';
+
+const VERSION = "v0.1.1";
 
 function App() {
   return (
     <div className="App">
-      <h1>ALLANCALL</h1>
-      <nav
-        style={{
-          borderBottom: "solid 1px",
-          padding: "5px"
-        }}
-      >
-        <Link to="/data">Data</Link>
-        <Link to="/voice">Voice</Link>
-        <Link to="/import">Import</Link>
-      </nav>
+      <Stack className='App-header' direction="horizontal" gap={2}><h2>ALLANCALL</h2>
+        {VERSION}
+        <div className="ms-auto">
+        <nav
+          style={{
+            padding: "0px"
+          }}
+        >
+          <Link to="/data">Data</Link>
+          <Link to="/voice">Call</Link>
+          <Link to="/import">Import</Link>
+        </nav></div></Stack>
       <main>
         <div className="content-area">
           <Outlet />

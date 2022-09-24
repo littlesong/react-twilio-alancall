@@ -9,10 +9,7 @@ import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-import { httpReq } from "../utils/restUtil";
-import { toPercentStr } from "../utils/utils";
-
-const genoEndpointBaseUrl = 'https://geno.eazylogic.com/v1';
+import { genoReq } from "../utils/restUtil";
 
 const styles = {
   middle: { marginTop: '20%' },
@@ -62,7 +59,7 @@ export default function ImportCsv() {
 
   const sendChunk = ( data, ref )=>{
           // POST to geno in chunks
-            httpReq("/objs", "post", { objs: data },)
+            genoReq("/objs", "post", { objs: data },)
             .then((data) => {
               console.log("Chunk saved:", ref);
               setProgress( data.length+progress );
@@ -72,6 +69,7 @@ export default function ImportCsv() {
   }
 
   const handleOnSave = (e) => {
+    e.preventDefault();
     const batchSize = 25;   //this is the limitation of GENO batch write
     if (array && array.length > 0) {
       let data = [];
@@ -93,7 +91,7 @@ export default function ImportCsv() {
         }
       }
 
-      httpReq("/objs", "post", { objs: data },)
+      genoReq("/objs", "post", { objs: data },)
         .then((data) => {
           console.log("Save data:", data);
           setMsg("Data saved to the cloud!");

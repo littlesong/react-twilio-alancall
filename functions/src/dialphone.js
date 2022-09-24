@@ -7,6 +7,15 @@ exports.handler = (context, event, callback) => {
   console.log(event);
 
   const phone = event.phone;
+
+  if (!phone) {
+    if (event.meta) {
+      return callback( { version } );
+    } else {
+      return callback( null, { error: "NO_PHONE" } );
+    }
+  }
+
   const client = context.getTwilioClient();
 
   let twiml = new Twilio.twiml.VoiceResponse();
@@ -28,5 +37,12 @@ exports.handler = (context, event, callback) => {
       console.log(error);
       return callback(error);
     });
-
 };
+
+function getResp(message, error, version ) {
+  return {
+    error,
+    message,
+    version
+  }
+}

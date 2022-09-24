@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card';
 import CardGroup from 'react-bootstrap/CardGroup';
 import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
+import { Link, } from "react-router-dom";
 
 export default function DataPage() {
 
@@ -24,7 +25,7 @@ export default function DataPage() {
     <Stack>
       <Stack direction="horizontal">
         <h5>Phone Numbers</h5>
-        <Button variant="link" onClick={onImport}>Import</Button>
+        <Link to="/import">Import</Link>
       </Stack>
       <CardGroup>
         <Card>
