@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 //import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Routes, Route, } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DataPage from './routes/data';
 import VoicePage from './routes/voice';
 import ImportCsv from './routes/import';
@@ -15,16 +15,8 @@ root.render(
     <Routes>
       <Route path="/" element={<App />} >
         <Route path="data" element={<DataPage />} />
-        <Route path="voice" element={<VoicePage />} />
         <Route path="import" element={<ImportCsv />} />
-        <Route
-          path="*"
-          element={
-            <main style={{ padding: '1rem' }}>
-              <p>There's nothing here!</p>
-            </main>
-          }
-        />
+        <Route path="*" element={<VoicePage />} />
       </Route>
     </Routes>
   </BrowserRouter>
