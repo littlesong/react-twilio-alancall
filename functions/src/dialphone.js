@@ -1,5 +1,6 @@
 
-const version = "1.0.1";
+const version = "1.0.3";
+const fromNumber = '+16173977775';
 
 exports.handler = (context, event, callback) => {
   console.log(version);
@@ -10,39 +11,41 @@ exports.handler = (context, event, callback) => {
 
   if (!phone) {
     if (event.meta) {
-      return callback( { version } );
+      return callback({ version });
     } else {
-      return callback( null, { error: "NO_PHONE" } );
+      return callback(null, { error: "NO_PHONE" });
     }
   }
 
   const client = context.getTwilioClient();
 
-  let twiml = new Twilio.twiml.VoiceResponse();
-  twiml.say('Hello World');
-  twiml.say(version);
+  // Create a custom Twilio Response
+  const response = new Twilio.Response();
+  // Set the CORS headers
+  response.appendHeader('Access-Control-Allow-Origin', '*');
+  response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET');
+  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  console.log("Calling", phone, "...");
+  console.log("Calling", phone);
+  console.log("context: ", context);
 
   client.calls
     .create({
       url: 'http://demo.twilio.com/docs/voice.xml',
       to: `+${phone}`,
-      from: context.DIAL_FROM
+      from: fromNumber
     })
     .then(call => {
+      response.appendHeader('Content-Type', 'application/json');
+      response.setBody({
+        from: call.from,
+        to: call.to,
+        status: call.status
+      });      
       console.log(call.sid);
-      return callback(null, 'Call ended!');
+      return callback(null, response);
     }).catch((error) => {
       console.log(error);
       return callback(error);
     });
 };
-
-function getResp(message, error, version ) {
-  return {
-    error,
-    message,
-    version
-  }
-}

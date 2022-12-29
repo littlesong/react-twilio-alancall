@@ -3,9 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Stack from 'react-bootstrap/Stack';
 import { httpReq } from "../utils/restUtil";
-
-const baseUrl = "https://test-service1-3651.twil.io/fun1";
-
+import { buildDialUrl } from '../utils/dial-api';
 
 export default function VoicePage() {
   const [phone, setPhone] = useState('613-797-7535');
@@ -21,7 +19,8 @@ export default function VoicePage() {
       return;
     }
 
-    const url = `${baseUrl}?phone=1${pn}`;
+    const url = buildDialUrl(pn);
+    console.log("API url:", url);
 
     httpReq(url)
       .then((data) => {

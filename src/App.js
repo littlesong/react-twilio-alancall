@@ -2,7 +2,7 @@ import './App.css';
 import { Link, Outlet } from "react-router-dom";
 import Stack from 'react-bootstrap/Stack';
 
-const VERSION = "v0.2.1";
+const VERSION = "v0.2.2";
 
 function App() {
   return (

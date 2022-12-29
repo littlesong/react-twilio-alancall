@@ -5,7 +5,7 @@
 
 # Create/Deploy service and functions
 
-    node deploy.js <service-config>         : service-config is the config json file without .js extension
+    node deploy.js <service-config>         : service-config is the config json file without .json extension
 
 # Undeploy (delete) service 
 
