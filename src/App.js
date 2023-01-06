@@ -2,7 +2,7 @@ import './App.css';
 import { Link, Outlet } from "react-router-dom";
 import Stack from 'react-bootstrap/Stack';
 
-const VERSION = "v0.2.3";
+const VERSION = "v0.3.2";
 
 function App() {
   return (
@@ -15,6 +15,7 @@ function App() {
             padding: "0px"
           }}
         >
+          <Link to="/poll">Polls</Link>
           <Link to="/data">Data</Link>
           <Link to="/voice">Call</Link>
           <Link to="/import">Import</Link>

@@ -9,6 +9,8 @@ import DataPage from './routes/data';
 import VoicePage from './routes/voice';
 import ImportCsv from './routes/import';
 import AboutPage from './routes/about';
+import PollPage from './routes/poll';
+import PollListPage from './routes/polls';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -18,6 +20,8 @@ root.render(
         <Route path="about" element={<AboutPage />} />
         <Route path="data" element={<DataPage />} />
         <Route path="import" element={<ImportCsv />} />
+        <Route path="poll" element={<PollListPage />} />
+        <Route path="poll/:id" element={<PollPage />} />
         <Route path="*" element={<VoicePage />} />
       </Route>
     </Routes>
