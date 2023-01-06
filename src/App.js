@@ -2,7 +2,7 @@ import './App.css';
 import { Link, Outlet } from "react-router-dom";
 import Stack from 'react-bootstrap/Stack';
 
-const VERSION = "v0.2.2";
+const VERSION = "v0.2.3";
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
           <Link to="/data">Data</Link>
           <Link to="/voice">Call</Link>
           <Link to="/import">Import</Link>
+          <Link to="/about">About</Link>
         </nav></div></Stack>
       <main>
         <div className="content-area">

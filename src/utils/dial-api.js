@@ -4,6 +4,6 @@ export const DialApi = {
     functionName: 'dial',
 };
 
-export function buildDialUrl(phoneNumber) {
-    return `https://${DialApi.serviceName}.twil.io/${DialApi.functionName}?phone=1${phoneNumber}`;
+export function buildDialUrl(phoneNumber, xml) {
+    return `https://${DialApi.serviceName}.twil.io/${DialApi.functionName}?phone=1${phoneNumber}&&xml=${xml}`;
 }

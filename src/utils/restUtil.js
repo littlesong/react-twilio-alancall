@@ -1,5 +1,6 @@
 const http = require('axios');
-const endpointBaseUrl = 'https://geno.eazylogic.com/v1';
+const endpointBaseUrl = 'https://sr3hx06os2.execute-api.us-east-1.amazonaws.com/Prod';
+//const endpointBaseUrl = 'https://geno.eazylogic.com/v1';
 const _app = 'geno-alancall-phone';
 
 export const genoReq = async (path, method="get", body=undefined, app = _app, baseUrl = endpointBaseUrl, headers = {

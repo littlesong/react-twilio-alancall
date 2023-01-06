@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+	<Say>Hello This is a testing scrip.</Say>
+	<Say>Please press 1 for yes 2 for no.</Say>
+	<Gather input="dtmf" timeout="30" numDigits="1" action="https://www.eazylogic.com/api/alancall/inputs/12345"></Gather>
+	<Say>This is question #2. Please press 1 for yes 2 for no.</Say>
+	<Gather input="dtmf" timeout="30" numDigits="2" action="https://www.eazylogic.com/api/alancall/inputs/12345"></Gather>
+	<Say>This is question #3. Please press 1 for yes 2 for no.</Say>
+	<Gather input="dtmf" timeout="30" numDigits="1" action="https://www.eazylogic.com/api/alancall/inputs/12345"></Gather>
+	<Say>Thank you for your feedback. Good bye.</Say>
+</Response>

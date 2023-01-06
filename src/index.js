@@ -8,12 +8,14 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DataPage from './routes/data';
 import VoicePage from './routes/voice';
 import ImportCsv from './routes/import';
+import AboutPage from './routes/about';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />} >
+        <Route path="about" element={<AboutPage />} />
         <Route path="data" element={<DataPage />} />
         <Route path="import" element={<ImportCsv />} />
         <Route path="*" element={<VoicePage />} />

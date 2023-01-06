@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+	<Say>Hello! This is a poll from the Noble and Greenough School Poll, a non-partisan polling organization based in Dedham, Massachusetts. This poll is paid for by the Noble and Greenough School which is located at 10 Campus Drive, Dedham, MA, Zip Code 02026. All answers are confidential and anonymous. Please note that you do not need to be a registered voter to participate, but you do need to be 18 or older. If you wish to continue, please stay on the line. If you do not want to continue feel freeto hang up.</Say>
+	<Gather input="dtmf" timeout="30" numDigits="1">
+		<Say>Thanks for choosing to continue with this poll. After this short message you will be asked a series of questions. You may use your keypad to respond. Please answer the questions honestly and to the best of your ability. Each question will be repeated once,and all answers will remain completelyconfidential and anonymous. Please press any key followed by the pound to begin.</Say>
+	</Gather>
+	<Gather input="dtmf" timeout="20" numDigits="1">
+		<Say>Are you registered to vote? Although we ask for this information, you do not need to be registered tovote to participate in this poll. Press 1 followed bythe pound for yes, and 2 followed by the pound for no.</Say>
+	</Gather>
+	<Gather input="dtmf" timeout="20" numDigits="1">
+		<Say>Which candidate would you vote for in a presidential election? 1 followed by the pound for Democratic Party Candidate, 2 followed by the pound for Republican Party Candidate, 3 followed by the pound for Other or Undecided.</Say>
+	</Gather>
+	<Gather input="dtmf" timeout="20" numDigits="1">
+		<Say>Which candidate would you vote for in a state election? 1 followed by the pound for Democratic Party Candidate, 2 followed by the pound for Republican Party Candidate, 3 followed by the pound for Other or Undecided.</Say>
+	</Gather>
+	<Gather input="dtmf" timeout="20" numDigits="1">
+		<Say>Which candidate would you vote for? 1 followed by the pound for Democratic Party Candidate, 2 followed by the pound for Republican Party Candidate, 3 followed by the pound for Other or Undecided.</Say>
+	</Gather>
+	<Gather input="dtmf" timeout="20" numDigits="1">
+		<Say>What gender do you identify as? 1 followed by the pound for Male, 2 followed by the pound for Female, 3 followed by the pound for Other.</Say>
+	</Gather>
+	<Gather input="dtmf" timeout="20" numDigits="1">
+		<Say>What age range is your current age within? 1 followed by the pound for 18 to 29, 2 followed by thepound for 30 to 44, 3 followed by the pound for 45 to64, 4 followed by the pound for 65 and over.</Say>
+	</Gather>
+	<Gather input="dtmf" timeout="20" numDigits="1">
+		<Say>What race do you identify as? 1 followed by the pound for Hispanic and Latino, 2 followed by the pound for Black or African-American, 3 followed by the pound for White, 4 followed by the pound for Asian and Pacific-Islander, 5 followed by the pound for Native American, 6 followed by the pound for Other.</Say>
+	</Gather>
+	<Gather input="dtmf" timeout="20" numDigits="1">
+		<Say>If you are registered to vote, what is the political affiliation you are registered under? 1 followed by the pound for Democratic party, 2 followed by the pound for Republican Party, 3 followed by the pound for Independent, 4 followed by the pound for Third Party, 5 followed by the pound ifyou are not registered to vote.</Say>
+	</Gather>
+	<Say>Thank you for your assistance with this poll. Youranswers have been received. If you would like to get incontact with us please email us at ______. You can alsofind us online at _____. Our website contains a variety ofpolls, articles, and more information about us. Have agreat day!</Say>
+</Response>

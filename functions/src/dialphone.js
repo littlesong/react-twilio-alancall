@@ -1,5 +1,5 @@
 
-const version = "1.0.3";
+const version = "1.0.4";
 const fromNumber = '+16173977775';
 
 exports.handler = (context, event, callback) => {
@@ -8,6 +8,7 @@ exports.handler = (context, event, callback) => {
   console.log(event);
 
   const phone = event.phone;
+  const xml = event.xml;
 
   if (!phone) {
     if (event.meta) {
@@ -16,6 +17,8 @@ exports.handler = (context, event, callback) => {
       return callback(null, { error: "NO_PHONE" });
     }
   }
+
+  if(!xml) xml = 'http://demo.twilio.com/docs/voice.xml';
 
   const client = context.getTwilioClient();
 
@@ -31,7 +34,7 @@ exports.handler = (context, event, callback) => {
 
   client.calls
     .create({
-      url: 'http://demo.twilio.com/docs/voice.xml',
+      url: xml,
       to: `+${phone}`,
       from: fromNumber
     })
@@ -41,7 +44,7 @@ exports.handler = (context, event, callback) => {
         from: call.from,
         to: call.to,
         status: call.status
-      });      
+      });
       console.log(call.sid);
       return callback(null, response);
     }).catch((error) => {
