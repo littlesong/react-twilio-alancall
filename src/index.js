@@ -14,18 +14,20 @@ import PollListPage from './routes/polls';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<App />} >
-        <Route path="about" element={<AboutPage />} />
-        <Route path="data" element={<DataPage />} />
-        <Route path="import" element={<ImportCsv />} />
-        <Route path="poll" element={<PollListPage />} />
-        <Route path="poll/:id" element={<PollPage />} />
-        <Route path="*" element={<VoicePage />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} >
+          <Route path="about" element={<AboutPage />} />
+          <Route path="data" element={<DataPage />} />
+          <Route path="import" element={<ImportCsv />} />
+          <Route path="poll" element={<PollListPage />} />
+          <Route path="poll/:id" element={<PollPage />} />
+          <Route path="*" element={<VoicePage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

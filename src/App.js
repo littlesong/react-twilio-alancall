@@ -1,8 +1,9 @@
 import './App.css';
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useRoutes } from "react-router-dom";
 import Stack from 'react-bootstrap/Stack';
+import { Navbar } from './components/navbar'
 
-const VERSION = "v0.3.2";
+const VERSION = "v0.3.3";
 
 function App() {
   return (
@@ -10,17 +11,8 @@ function App() {
       <Stack className='App-header' direction="horizontal" gap={2}><h2>ALLANCALL</h2>
         {VERSION}
         <div className="ms-auto">
-        <nav
-          style={{
-            padding: "0px"
-          }}
-        >
-          <Link to="/poll">Polls</Link>
-          <Link to="/data">Data</Link>
-          <Link to="/voice">Call</Link>
-          <Link to="/import">Import</Link>
-          <Link to="/about">About</Link>
-        </nav></div></Stack>
+          <Navbar />
+        </div></Stack>
       <main>
         <div className="content-area">
           <Outlet />
