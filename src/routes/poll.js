@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Stack from 'react-bootstrap/Stack';
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
+import Alert from 'react-bootstrap/Alert';
 import { useParams } from "react-router-dom";
 import { httpReq, buildI4gUrl } from "../utils/restUtil";
 
@@ -19,6 +20,8 @@ export default function PollPage() {
     const [newDesc, setNewDesc] = useState();
 
     const [loading, setLoading] = useState(true);
+
+    const [msg, setMsg] = useState();
 
     const params = useParams();
     const pollId = params.id;
@@ -63,6 +66,7 @@ export default function PollPage() {
 
     const onCreateQuestion = () => {
         setLoading(true);
+        setMsg()
         console.log('Saving question in: ', poll)
 
         httpReq(buildI4gUrl(`/poll/${poll.id}/quest`), 'post',
@@ -93,6 +97,7 @@ export default function PollPage() {
 
     const deleteQuestion = (item) => {
         console.log('deleting quest: ', item);
+        setMsg()
         httpReq(buildI4gUrl(`/poll/${pollId}/quest/${item.id}`), 'delete',)
             .then((data) => {
                 console.log('question delete: ', data);
@@ -101,6 +106,7 @@ export default function PollPage() {
                 console.error("/poll/:id/quest/:id DELETE failed:", err);
                 //setText1("Something went wrong. Please try again later.");
                 setLoading(false)
+                setMsg('Cannot delete the question because it is already been answered')
             });
     }
 
@@ -148,7 +154,7 @@ export default function PollPage() {
                         questions && <Table striped bordered hover responsive size="sm" style={{ marginTop: '10px' }}>
                             <thead>
                                 <tr key={"header"}>
-                                    {['Question', 'Answers', 'Order'].map((key) => (
+                                    {['id', 'Question', 'Answers', 'Order'].map((key) => (
                                         <th key={key}>{key}</th>
                                     ))}
                                 </tr>
@@ -157,6 +163,7 @@ export default function PollPage() {
                             <tbody>
                                 {questions.map((item) => (
                                     <tr key={item.id}>
+                                        <td > {item.id}</td>
                                         <td > {item.content}</td>
                                         <td > {item.maxans}</td>
                                         <td > {item.orderid}</td>
@@ -207,6 +214,9 @@ export default function PollPage() {
                     </Form>
                 </Stack>
                 {renderLoading}
+                {msg && <Alert key={'danger'} variant={'danger'}>
+                    {msg}
+                </Alert>}
             </Stack>);
     }
 

@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 //import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 import DataPage from './routes/data';
 import VoicePage from './routes/voice';
 import ImportCsv from './routes/import';
@@ -15,7 +15,7 @@ import PollListPage from './routes/polls';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<App />} >
           <Route path="about" element={<AboutPage />} />
@@ -26,7 +26,7 @@ root.render(
           <Route path="*" element={<VoicePage />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>
 );
 

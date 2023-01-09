@@ -2,8 +2,7 @@ import './App.css';
 import { Link, Outlet, useRoutes } from "react-router-dom";
 import Stack from 'react-bootstrap/Stack';
 import { Navbar } from './components/navbar'
-
-const VERSION = "v0.3.3";
+import { VERSION } from './constants'
 
 function App() {
   return (

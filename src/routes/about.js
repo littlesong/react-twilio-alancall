@@ -1,15 +1,15 @@
 /* eslint-disable no-loop-func */
 import React, { useState, useEffect } from "react";
 import Stack from 'react-bootstrap/Stack';
+import { VERSION } from '../constants'
 
 export default function AboutPage() {
-    const [genoMeta, setGenoMeta] = useState('1.1');
 
     return (
         <div>
             <Stack>
                 <h5>Alancall</h5>
-                { genoMeta }
+                { VERSION }
             </Stack>
         </div>
     );
