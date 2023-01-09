@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Stack from 'react-bootstrap/Stack';
-import { buildDialUrl } from '../utils/dial-api';
+import { buildDialUrl, dialPhoneNumber } from '../utils/dial-api';
 import { httpReq, buildI4gUrl, buildTwiMlUrl } from "../utils/restUtil";
 import Spinner from 'react-bootstrap/Spinner';
 
@@ -30,26 +30,12 @@ export default function VoicePage() {
 
   const callPhoneNumber = (e) => {
     e.preventDefault();
-
-    const pn = phone.trim().replaceAll('-', '');
-
-    if (!pn) {
-      setText1("Please enter a phone number!");
+    try{
+      dialPhoneNumber(phone, selectedPoll);
+    } catch(e){
+      setText1(JSON.stringify(e));
       return;
     }
-
-    const twiMLurl = buildTwiMlUrl(selectedPoll);
-    const url = buildDialUrl(pn, twiMLurl);
-    console.log("API url:", url);
-
-    httpReq(url)
-      .then((data) => {
-        console.log("Dialed:", phone);
-        setText1(`Dialing ${phone} ...`);
-      }).catch(err => {
-        console.error("Dialing failed:", err);
-        setText1("Something went wrong. Please try again later.");
-      });
   }
 
   useEffect(() => {

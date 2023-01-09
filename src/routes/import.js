@@ -1,5 +1,5 @@
 /* eslint-disable no-loop-func */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from 'react-bootstrap/Table';
 import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
@@ -10,10 +10,28 @@ import ToastContainer from 'react-bootstrap/ToastContainer';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 import { genoReq } from "../utils/restUtil";
+import { buildDialUrl, dialPhoneNumber } from '../utils/dial-api';
+import { httpReq, buildI4gUrl, buildTwiMlUrl } from "../utils/restUtil";
 
 const styles = {
   middle: { marginTop: '20%' },
-  center: { textAlign: 'center' }
+  center: { textAlign: 'center' },
+}
+
+const PhoneStatusStyles = {
+  invalid: { bgcolor: 'red' },
+  hadCalled: { color: 'blue' },
+  called: { color: 'green' },
+  callFailed: { color: 'red' },
+  unknown: { color: 'black' },
+}
+
+const PhoneStatus = {
+  invalid: 0,       // phone number is invalid
+  hadCalled: 1,     // the phone number had been dialed before
+  called: 2,        // the phone number was dialed successfully 
+  callFailed: 3,    // something wrong when dialing the number
+  unknown: 4,
 }
 
 export default function ImportCsv() {
@@ -22,8 +40,10 @@ export default function ImportCsv() {
   const [array, setArray] = useState([]);
   const [header, setHeader] = useState([]);
   const [stcode, setStcode] = useState('KS');
-  const [msg, setMsg] = useState(null);
+  const [msg, setMsg] = useState('Please import phone numbers.');
   const [progress, setProgress] = useState();
+  const [polls, setPolls] = useState();
+  const [selectedPoll, setSelectedPoll] = useState();
 
   const fileReader = new FileReader();
 
@@ -35,7 +55,14 @@ export default function ImportCsv() {
   const csvFileToArray = string => {
     const csvHeader = string.slice(0, string.indexOf("\n")).split(",").map(i => i?.replace(/^"(.*)"$/, '$1'));
     const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
-    const array = csvRows.map(i => i.split(",").map(i => i?.replace(/^"(.*)"$/, '$1')));
+    const array = csvRows.map(i => i.split(",").map(i => {
+      const n = i?.replace(/^"(.*)"$/, '$1');
+      const s = (!n || n.length < 10) ? PhoneStatus.invalid : PhoneStatus.unknown;
+      return {
+        n,
+        s,
+      }
+    }));
 
     setHeader(csvHeader);
     setArray(array);
@@ -44,6 +71,7 @@ export default function ImportCsv() {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     if (file) {
+      setMsg();
       setLoading(true);
       fileReader.onload = function (event) {
         const text = event.target.result;
@@ -57,52 +85,46 @@ export default function ImportCsv() {
     }
   };
 
-  const sendChunk = ( data, ref )=>{
-          // POST to geno in chunks
-            genoReq("/objs", "post", { objs: data },)
-            .then((data) => {
-              console.log("Chunk saved:", ref);
-              setProgress( data.length+progress );
-            }).catch(err => {
-              console.error("Chunk failed:", err);
-            });
-  }
-
   const handleOnSave = (e) => {
     e.preventDefault();
-    const batchSize = 25;   //this is the limitation of GENO batch write
-    if (array && array.length > 0) {
-      let data = [];
-      for (let row of array) {
-        // skip the 1st item
-        for (let i = 1; i < row.length; i++) {
-          data.push({
-            id: row[i],
-            phone: row[i],
-            stc: stcode,
-            status: 0
-          });
 
-          // POST to geno in chunks
-          if(data.length===batchSize){
-            sendChunk(data, i);
-            data =[];
-           } 
+    if (!(array && array.length > 0)) {
+      return setMsg('Please import the phone numbers.')
+    }
+    if (!selectedPoll) {
+      return setMsg('Please select the poll.')
+    }
+
+    setMsg('Dialing ...')
+    for (let row of array) {
+      // skip the 1st item
+      for (let i = 1; i < row.length; i++) {
+        const pn = row[i];
+        if (pn && pn.s === PhoneStatus.unknown) {
+          dialPhoneNumber(row[i].n, selectedPoll).then((i) => {
+
+          });
         }
       }
-
-      genoReq("/objs", "post", { objs: data },)
-        .then((data) => {
-          console.log("Save data:", data);
-          setMsg("Data saved to the cloud!");
-        }).catch(err => {
-          console.error(err);
-          setMsg("Error: something went wrong! Please try again later.");
-        });
-    }else{
-      setMsg("Please import the data first.");
     }
   };
+
+  const fetchPolls = async () => {
+    setLoading(true)
+    try {
+      const data = await httpReq(buildI4gUrl('/poll'))
+      setPolls(data)
+      setLoading(false)
+    } catch (err) {
+      console.error("/poll failed:", err);
+      //setText1("Something went wrong. Please try again later.");
+      setLoading(false)
+    };
+  }
+
+  useEffect(() => {
+    fetchPolls();
+  }, [])
 
   return (
     <div>
@@ -110,13 +132,13 @@ export default function ImportCsv() {
         <h5>Import phone numbers from CSV</h5>
         <Form>
           <Stack direction="horizontal" gap={3}>
-            <input
-              type={"file"}
-              id={"csvFileInput"}
-              accept={".csv"}
-              onChange={handleOnChange}
-            />
-            <div className="ms-auto">
+            <Stack direction="horizontal" gap={2}>
+              <input
+                type={"file"}
+                id={"csvFileInput"}
+                accept={".csv"}
+                onChange={handleOnChange}
+              />
               <Button size="sm" variant="outline-primary"
                 onClick={(e) => {
                   handleOnSubmit(e);
@@ -124,64 +146,80 @@ export default function ImportCsv() {
               >
                 Import
               </Button>
-            </div>
-            <Button size="sm" variant="outline-primary"
-              onClick={(e) => {
-                setArray([]);
-              }}
-            >
-              Clear
-            </Button>
-            <Button size="sm" variant="outline-primary"
-              onClick={(e) => {
-                handleOnSave(e);
-              }}
-            >
-              Save
-            </Button>
+              <Button size="sm" variant="outline-primary"
+                onClick={(e) => {
+                  setArray([]);
+                  setMsg()
+                }}
+              >
+                Clear
+              </Button>
+            </Stack>
+
+            {polls && polls.length > 0 &&
+              <Stack direction="horizontal" gap={2} className="ms-auto">
+                <Form.Label>Poll:</Form.Label>
+                <Form.Select onChange={e => {
+                  const pid = Number(e.target.value);
+                  console.log('selected poll id:', pid);
+                  const po = polls.find(i => i.id === pid);
+                  console.log('selected poll:', po);
+                  setSelectedPoll(po)
+                }}>
+                  <option value={false}>Select the Poll</option>
+
+                  {polls.map(p => (<option key={p.id} value={p.id}>{p.name}</option>))}
+
+                </Form.Select>
+
+                <Button size="sm" variant="outline-primary"
+                  onClick={(e) => {
+                    handleOnSave(e);
+                  }}
+                >
+                  CallAll
+                </Button>
+              </Stack>}
           </Stack>
 
         </Form>
       </Stack>
-      
+
       {
-        (progress!==undefined) && <ProgressBar max={array.length} now={progress} />
+        (progress !== undefined) && <ProgressBar max={array.length} now={progress} />
       }
 
       {
         // render the csv table
-        loading ? <div style={styles.middle}><Spinner animation="border" size="lg" /></div> : (
-          (array && array.length > 0) ?
-            <Table striped bordered hover responsive size="sm" style={{ marginTop: '10px' }}>
-              <thead>
-                <tr key={"header"}>
-                  {header.map((key) => (
-                    <th key={key}>{key}</th>
-                  ))}
-                </tr>
-              </thead>
+        loading && <div style={styles.middle}><Spinner animation="border" size="lg" /></div>
+      }
+      {
+        (array && array.length > 0) &&
+        <Table striped bordered hover responsive size="sm" style={{ marginTop: '10px' }}>
+          <thead>
+            <tr key={"header"}>
+              {header.map((key) => (
+                <th key={key}>{key}</th>
+              ))}
+            </tr>
+          </thead>
 
-              <tbody>
-                {array.map((item) => (
-                  <tr key={item[0]}>
-                    {item.map((val) => (
-                      <td key={val}>{val}</td>
-                    ))}
-                  </tr>
+          <tbody>
+            {array.map((item) => (
+              <tr key={item[0]}>
+                {item.map((val) => (
+                  <td style={PhoneStatusStyles[val.s]} key={val.n}>{val.n}</td>
                 ))}
-              </tbody>
-            </Table> :
-            <div style={styles.middle} >No Data</div>
-        )}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+
+      }
 
       {
         // render the message toast
-        msg && <ToastContainer className="p-3" position='middle-center'>
-          <Toast delay={1000} autohide show={msg} onClose={() => { setMsg(null) }} bg='warning'>
-            <Toast.Body>
-              {msg}
-            </Toast.Body>
-          </Toast></ToastContainer>
+        msg && <Stack>{msg}</Stack>
       }
 
     </div>

@@ -1,25 +1,15 @@
 /* eslint-disable no-loop-func */
 import React, { useState, useEffect } from "react";
 import Stack from 'react-bootstrap/Stack';
-import { genoReq } from "../utils/restUtil";
 
 export default function AboutPage() {
-    const [genoMeta, setGenoMeta] = useState();
-
-    useEffect(() => {
-        genoReq("/meta")
-            .then((data) => {
-                setGenoMeta(data);
-            }).catch(err => {
-                console.error("geno failed:", err);
-            });
-    }, [])
+    const [genoMeta, setGenoMeta] = useState('1.1');
 
     return (
         <div>
             <Stack>
-                <h5>Geno</h5>
-                {JSON.stringify(genoMeta)}
+                <h5>Alancall</h5>
+                { genoMeta }
             </Stack>
         </div>
     );

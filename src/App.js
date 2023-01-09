@@ -8,11 +8,13 @@ const VERSION = "v0.3.3";
 function App() {
   return (
     <div className="App">
-      <Stack className='App-header' direction="horizontal" gap={2}><h2>ALLANCALL</h2>
+      <Stack className='App-header' direction="horizontal" gap={2}>
+        <h2>ALLANCALL</h2>
         {VERSION}
         <div className="ms-auto">
           <Navbar />
-        </div></Stack>
+        </div>
+      </Stack>
       <main>
         <div className="content-area">
           <Outlet />

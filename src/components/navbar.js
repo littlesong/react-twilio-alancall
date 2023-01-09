@@ -8,9 +8,9 @@ export function Navbar() {
             <nav>
                 <Stack className='App-header' direction="horizontal" gap={2}>
                     <Link to="/poll">Polls</Link>
+                    <Link to="/import">Import</Link>
                     <Link to="/data">Data</Link>
                     <Link to="/voice">Call</Link>
-                    <Link to="/import">Import</Link>
                     <Link to="/about">About</Link>
                 </Stack>
             </nav>
