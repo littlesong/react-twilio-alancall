@@ -7,6 +7,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 import { useParams } from "react-router-dom";
 import { httpReq, buildI4gUrl } from "../utils/restUtil";
+import { OP_REMOVE_ALL } from '../constants'
 
 export default function PollPage() {
     const [content, setContent] = useState('');
@@ -110,6 +111,17 @@ export default function PollPage() {
             });
     }
 
+    const resetPoll = () => {
+        setLoading(true)
+        httpReq(buildI4gUrl(`/poll/${pollId}`), 'post', { answer: OP_REMOVE_ALL }).then(data => {
+            console.log("ResetPoll:", data);
+            setLoading(false)
+        }).catch(err => {
+            console.error("ResetPoll failed:", err);
+            setLoading(false)
+        })
+    }
+
     const renderLoading =
         loading && <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -142,6 +154,9 @@ export default function PollPage() {
 
                             <Button type="submit" size="sm" variant="outline-primary">
                                 Update Poll
+                            </Button>
+                            <Button size="sm" variant="outline-primary" onClick={resetPoll}>
+                                Reset Answers
                             </Button>
 
                         </Stack>
