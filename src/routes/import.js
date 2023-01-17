@@ -9,7 +9,6 @@ import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-import { genoReq } from "../utils/restUtil";
 import { buildDialUrl, dialPhoneNumber } from '../utils/dial-api';
 import { httpReq, buildI4gUrl, buildTwiMlUrl } from "../utils/restUtil";
 

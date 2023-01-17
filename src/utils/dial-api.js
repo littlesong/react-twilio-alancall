@@ -1,4 +1,4 @@
-import { httpReq, buildI4gUrl, buildTwiMlUrl } from "./restUtil";
+import { httpReq, buildTwiMlUrl } from "./restUtil";
 
 export const DialApi = {
     serviceName: 'alancall-5826',

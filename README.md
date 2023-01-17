@@ -5,19 +5,19 @@ This is a demo web app that allows the user to calling US phone numbers. Current
 - Dial any specified US phone number
 - Import phone numbers from CSV file
 
-## What's next
+## Components
 
-Next, we'll experiment the following requirements.
+This React app is using two backend services
 
-- Directly dial phone numbers from the imported lists
-- Managing the call life cycle
-    - start the call
-    - monitor the call events to 
-        - receives and stores the keypad response from the callee
-        - track (store) the call status
-- Export the result to CSV (?)
-- Compose and apply TwiML call instructions
-    - parameterize it
+    - a twilio serveless api for dialing phone#
+
+        See /src/utils/dial-api.js
+
+        To config this endpoint, update `DialApi` object in the above file.
+
+    - a RESTful endpoint hosted on AWS (as part of GreenAward) for managing the polls, questions and the answers
+    
+        See /src/utils/restUtil.js
 
 ---------------
 # Source Code Folder Structure
