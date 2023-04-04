@@ -2,6 +2,10 @@ const http = require('axios');
 
 const i4gBaseUrl = 'https://gl0.mygreenaward.com/pub/ac';
 
+// local test (don't forget to update the port#)
+// const i4gBaseUrl = 'http://localhost:58654/pub/ac';
+
+
 export function buildI4gUrl(path) {
     return `${i4gBaseUrl}${path}`
 }

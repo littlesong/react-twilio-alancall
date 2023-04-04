@@ -16,34 +16,34 @@ import Form from 'react-bootstrap/Form';
 export function PollSelector({ title, onLoaded, onSelectionChanged }) {
     const [polls, setPolls] = useState();
 
-    const fetchPolls = async () => {
-        try {
-            const data = await httpReq(buildI4gUrl('/poll'))
-            setPolls(data)
-            if(onLoaded) onLoaded(undefined, data)
-        } catch (err) {
-            console.error("/poll failed:", err);
-            if(onLoaded) onLoaded(err)
-        };
-    }
-
     useEffect(() => {
+        const fetchPolls = async () => {
+            try {
+                const data = await httpReq(buildI4gUrl('/poll'))
+                setPolls(data)
+                if (onLoaded) onLoaded(undefined, data)
+            } catch (err) {
+                console.error("/poll failed:", err);
+                if (onLoaded) onLoaded(err)
+            };
+        }
+
         fetchPolls();
-    }, [])
+    })
 
     return (
         <>
-        { title && <Form.Label> {title} </Form.Label>}
-        <Form.Select onChange={e => {
-            const pid = Number( e.target.value);
-            const po = polls.find(i => i.id === pid);
-            if(onSelectionChanged) onSelectionChanged(po)
-          }}>
-            <option value={false}>Select Poll</option>
+            {title && <Form.Label> {title} </Form.Label>}
+            <Form.Select onChange={e => {
+                const pid = Number(e.target.value);
+                const po = polls.find(i => i.id === pid);
+                if (onSelectionChanged) onSelectionChanged(po)
+            }}>
+                <option value={false}>Select Poll</option>
 
-            {polls && polls.map(p => (<option key={p.id} value={p.id}>{p.name}</option>))}
+                {polls && polls.map(p => (<option key={p.id} value={p.id}>{p.name}</option>))}
 
-          </Form.Select>
-          </>
+            </Form.Select>
+        </>
     )
 }

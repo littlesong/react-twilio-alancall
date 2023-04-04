@@ -17,8 +17,8 @@ export default function PollPage() {
     const [questions, setQuestions] = useState([]);
 
     const [poll, setPoll] = useState();
-    const [newTitle, setNewTitle] = useState();
-    const [newDesc, setNewDesc] = useState();
+    const [newTitle, setNewTitle] = useState("");
+    const [newDesc, setNewDesc] = useState("");
 
     const [loading, setLoading] = useState(true);
 
@@ -26,20 +26,6 @@ export default function PollPage() {
 
     const params = useParams();
     const pollId = params.id;
-
-    const fetchPoll = async (pollId) => {
-        setLoading(true)
-        try {
-            const data = await httpReq(buildI4gUrl(`/poll/${pollId}`))
-            console.log("Poll:", data);
-            setPoll(data)
-            setLoading(false)
-        } catch (err) {
-            console.error("/poll/:id failed:", err);
-            //setText1("Something went wrong. Please try again later.");
-            setLoading(false)
-        }
-    }
 
     const queryQuestions = async () => {
         console.log("query questions ...")
@@ -57,13 +43,29 @@ export default function PollPage() {
     }
 
     useEffect(() => {
-        console.log('loading 1 ...')
+        const fetchPoll = async (pollId) => {
+            setLoading(true)
+            try {
+                const data = await httpReq(buildI4gUrl(`/poll/${pollId}`))
+                console.log("Poll:", data);
+                setPoll(data)
+                setNewTitle(data.name)
+                setNewDesc(data.descrp)
+                setLoading(false)
+            } catch (err) {
+                console.error("/poll/:id failed:", err);
+                //setText1("Something went wrong. Please try again later.");
+                setLoading(false)
+            }
+        }
+    
         fetchPoll(pollId).then(
             (p) => {
                 queryQuestions();
             }
         )
-    }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pollId])
 
     const onCreateQuestion = () => {
         setLoading(true);
@@ -86,14 +88,19 @@ export default function PollPage() {
             });
     }
 
-    const updatePoll = async () => {
-    }
-
-
-    const onUpdatePoll = () => {
-        updatePoll().catch((err) => {
-            console.log("Error onUpdatePoll", err);
-        });
+    const updatePoll = () => {
+        setLoading(true)
+        httpReq(buildI4gUrl(`/poll/${pollId}`), 'patch',
+            {
+                name: newTitle, 
+                descrp: newDesc
+            }).then(data => {
+                console.log("updatePoll:", data);
+                setLoading(false)
+            }).catch(err => {
+                console.error("updatePoll failed:", err);
+                setLoading(false)
+            })
     }
 
     const deleteQuestion = (item) => {
@@ -133,22 +140,23 @@ export default function PollPage() {
                 <h4>Poll</h4>
                 {poll.id}
                 <Stack style={{ marginTop: '10px' }}>
-                    <Form onSubmit={onUpdatePoll}>
+                    <Form id="form1" onSubmit={updatePoll}>
                         <Stack direction="horizontal" gap={2} >
-                            <Form.Group className="mb-3" controlId="formBasicName">
+                            <Form.Group className="mb-3" controlId="formBasicName1">
                                 <Form.Label column='sm'>Poll Name: </Form.Label>
                                 <Form.Control
                                     type="text"
-                                    value={poll?.title}
-                                    onChange={e => setNewTitle(e.target.value)} />
+                                    value={newTitle}
+                                    onChange={(e)=>setNewTitle(e.target.value)}
+                                    />
                             </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="formBasicContent">
+                            <Form.Group className="mb-3" controlId="formBasicContent1">
                                 <Form.Label column='sm'>Description: </Form.Label>
                                 <Form.Control
                                     type="text"
-                                    value={poll?.description}
-                                    onChange={e => setNewDesc(e.target.value)}
+                                    value={newDesc}
+                                    onChange={(e)=>setNewDesc(e.target.value)}
                                 />
                             </Form.Group>
 
@@ -192,10 +200,10 @@ export default function PollPage() {
 
                 <Stack style={{ marginTop: '10px' }}>
                     <h6>Add New Question:</h6>
-                    <Form onSubmit={onCreateQuestion}>
+                    <Form id="form2" onSubmit={onCreateQuestion}>
                         <Stack direction="horizontal" gap={2} >
 
-                            <Form.Group className="mb-3" controlId="formBasicName">
+                            <Form.Group className="mb-3" controlId="formBasicName2">
                                 <Form.Label column='sm'>Question: </Form.Label>
                                 <Form.Control
                                     type="text"
@@ -203,7 +211,7 @@ export default function PollPage() {
                                     onChange={e => setContent(e.target.value)} />
                             </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="formBasicContent">
+                            <Form.Group className="mb-3" controlId="formBasicContent2">
                                 <Form.Label column='sm'>Num Answers: </Form.Label>
                                 <Form.Control
                                     type="number"
@@ -212,7 +220,7 @@ export default function PollPage() {
                                 />
                             </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="formBasicContent">
+                            <Form.Group className="mb-3" controlId="formBasicContent3">
                                 <Form.Label column='sm'>Order: </Form.Label>
                                 <Form.Control
                                     type="number"

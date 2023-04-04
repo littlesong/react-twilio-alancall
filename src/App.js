@@ -9,7 +9,6 @@ function App() {
     <div className="App">
       <Stack className='App-header' direction="horizontal" gap={2}>
         <h2>ALLANCALL</h2>
-        {VERSION}
         <div className="ms-auto">
           <Navbar />
         </div>
