@@ -17,20 +17,70 @@ const styles = {
   center: { textAlign: 'center' },
 }
 
-const PhoneStatusStyles = {
-  invalid: { bgcolor: 'red' },
-  hadCalled: { color: 'blue' },
-  called: { color: 'green' },
-  callFailed: { color: 'red' },
-  unknown: { color: 'black' },
-}
+const PhoneStatusStyles = [
+  /* invalid: */ { color: 'brown' },
+  /* hadCalled: */ { color: 'blue' },
+  /* called: */ { color: 'green' },
+  /* callFailed: */ { color: 'red' },
+  /* unknown: */ { color: 'black' },
+  { color: 'grey' } //dup
+]
 
 const PhoneStatus = {
   invalid: 0,       // phone number is invalid
   hadCalled: 1,     // the phone number had been dialed before
   called: 2,        // the phone number was dialed successfully 
   callFailed: 3,    // something wrong when dialing the number
-  unknown: 4,
+  unknown: 4,       // phone number is valid. The calling status is unknown
+  dup: 5,           // duplicate number
+}
+
+/**
+ * 
+ * @param {*} a 
+ * @param {*} m : the current row id
+ * @param {*} n : the current col id
+ * return: the current cell if dup found. Other wise undefined
+ */
+const checkDup = (a, m, n) => {
+  const c = a[m][n];
+
+  // search in previous rows
+  for (let i = 0; i < m; i++) {
+    const row = a[i]
+    for (let j = 0; j < row.length; j++) {
+      if (row[j].k === c.k) {
+        return c;
+      }
+    }
+  }
+
+  // search in the current row
+  const row = a[m]
+  for (let j = 0; j < n; j++) {
+    if (row[j].k === c.k) {
+      return c;
+    }
+  }
+}
+
+const dialAll = async (a, selectedPoll) =>{
+  for (let row of a) {
+    // skip the 1st item
+    for (let i = 1; i < row.length; i++) {
+      const pn = row[i];
+      if (pn && pn.s === PhoneStatus.unknown) {
+        try{
+          await dialPhoneNumber(pn.n, selectedPoll);
+          console.log("Dialed", pn.n)
+          pn.s = PhoneStatus.called
+        }catch(e) {
+          console.error("Dial failed", pn.n, e)
+          pn.s = PhoneStatus.callFailed
+        }
+      }
+    }
+  }
 }
 
 export default function ImportCsv() {
@@ -54,17 +104,38 @@ export default function ImportCsv() {
   const csvFileToArray = string => {
     const csvHeader = string.slice(0, string.indexOf("\n")).split(",").map(i => i?.replace(/^"(.*)"$/, '$1'));
     const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
-    const array = csvRows.map(i => i.split(",").map(i => {
+    const a = csvRows.map(i => i.split(",").map(i => {
       const n = i?.replace(/^"(.*)"$/, '$1');
-      const s = (!n || n.length < 10) ? PhoneStatus.invalid : PhoneStatus.unknown;
+      const s = (!n || n.length !== 10) ? PhoneStatus.invalid : PhoneStatus.unknown;
       return {
         n,
+        k: n?n:'.',
         s,
       }
     }));
 
+    // search for dups
+    let d = [];   // holds all the dups found
+    for (let i = 0; i < a.length; i++) {
+      const row = a[i]
+      for (let j = 0; j < row.length; j++) {
+        const c = checkDup(a, i, j)
+        if (c) d.push(c)
+      }
+    }
+
+    console.log("DUPs 111", JSON.stringify(d, null, 3))
+
+    d.forEach((i, index) => {
+      if (i.s !== PhoneStatus.invalid) i.s = PhoneStatus.dup;
+      i.k = `${i.k}-${index}`
+    })
+
+    console.log("DUPs 222", JSON.stringify(d, null, 3))
+
     setHeader(csvHeader);
-    setArray(array);
+    console.log("CSV", JSON.stringify(a, null, 3))
+    setArray(a);
   };
 
   const handleOnSubmit = (e) => {
@@ -95,17 +166,11 @@ export default function ImportCsv() {
     }
 
     setMsg('Dialing ...')
-    for (let row of array) {
-      // skip the 1st item
-      for (let i = 1; i < row.length; i++) {
-        const pn = row[i];
-        if (pn && pn.s === PhoneStatus.unknown) {
-          dialPhoneNumber(row[i].n, selectedPoll).then((i) => {
-
-          });
-        }
-      }
-    }
+    dialAll(array, selectedPoll).then( ()=>{
+      setMsg('Done!')
+    }).catch((e)=>{
+      setMsg('Done with some failures.')
+    })
   };
 
   const fetchPolls = async () => {
@@ -205,9 +270,9 @@ export default function ImportCsv() {
 
           <tbody>
             {array.map((item) => (
-              <tr key={item[0]}>
+              <tr key={`row-${item[0].k}`}>
                 {item.map((val) => (
-                  <td style={PhoneStatusStyles[val.s]} key={val.n}>{val.n}</td>
+                  <td style={PhoneStatusStyles[val.s]} key={val.k}>{val.n}</td>
                 ))}
               </tr>
             ))}
